@@ -85,13 +85,13 @@ class MLPlay:
             elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
                 ball_direction = 3
             # x.append([ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]])
-            x = [ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]]
+            x = [self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1], ball_direction]
             x_reshaped = np.array(x).reshape(1, -1) 
             #print(x)
             # print(x_reshaped)
             # 預測
             prediction = self.loaded_model.predict(x_reshaped)
-            print(f'prediction[0]: {prediction[0]}')
+            # print(f'prediction[0]: {prediction[0]}')
             # 輸出指令
             if prediction[0] == 1:
                 command = "MOVE_RIGHT"

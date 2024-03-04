@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report
-
+from sklearn.model_selection import StratifiedShuffleSplit
 
 def load_data_from_pickle(folder_path):
     """
@@ -14,8 +14,12 @@ def load_data_from_pickle(folder_path):
     data = []
     data_files = os.listdir(folder_path)
     for file in data_files:
-        with open(os.path.join(folder_path, file), 'rb') as f:
-            data += pickle.load(f)
+        if os.path.getsize(os.path.join(folder_path, file)) > 0: # Pickle - EOFError: Ran out of input
+            with open(os.path.join(folder_path, file), 'rb') as f:
+                try: # Pickle - EOFError: Ran out of input
+                    data += pickle.load(f)
+                except Exception as e:
+                    print(e, file)
     return data
 
 
@@ -39,10 +43,12 @@ def train_model(X_train, y_train):
     """
     knn = KNeighborsClassifier()
     # param_grid = {'n_neighbors': [3, 5, 7, 13, 17, 19]}
-    param_grid = {'n_neighbors': [3, 5, 7]}
+    # param_grid = {'n_neighbors': [3, 5, 7]}
     # param_grid = {'n_neighbors': [13]}
-    # param_grid = {'n_neighbors': [i for i in range(3, 1000)]}
-    grid_search = GridSearchCV(knn, param_grid, cv=5, scoring='accuracy')
+    param_grid = {'n_neighbors': range(1, 5)}
+    cv = StratifiedShuffleSplit(n_splits=2, test_size=0.3, random_state=12)
+    # grid_search = GridSearchCV(knn, param_grid, cv=cv, scoring='accuracy', verbose=3)
+    grid_search = GridSearchCV(knn, param_grid, cv=cv, verbose=3, n_jobs=-1)
     grid_search.fit(X_train, y_train)
     
     best_knn = grid_search.best_estimator_
@@ -67,12 +73,13 @@ if __name__ == "__main__":
     # 加载数据
     data_folder = 'data_pickle'
     data = load_data_from_pickle(data_folder)
+    print(f"資料筆數：{len(data)}")
     
     # 数据预处理
     X, y = preprocess_data(data)
     
     # 划分训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     # 训练模型
     print("Training model...")
