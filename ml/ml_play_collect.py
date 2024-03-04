@@ -71,7 +71,7 @@ class MLPlay:
                 else:
                     command = "NONE"
 
-        # if (scene_info['ball'][1] > self.previous_ball_y):
+        # if (scene_info['ball'][1] < self.previous_ball_y):
         # 如果球正在下降才要搜集資料
         data_dir = {}
         # 右下0 右上1 左下2 左上3
