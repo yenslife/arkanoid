@@ -24,7 +24,7 @@ def preprocess_data(data):
     数据预处理：提取特征和标签，并进行标准化处理
     """
     X = np.array([[d['ball'][0], d['ball'][1], d['ball_speed'][0], d['ball_speed'][1],d['direction']] for d in data])
-    y = np.array([d['platform_dir']for d in data])
+    y = np.array([d['platform_dir'] for d in data])
     
     # 数据标准化
     scaler = StandardScaler()
@@ -38,7 +38,10 @@ def train_model(X_train, y_train):
     使用网格搜索交叉验证来训练 KNN 模型并返回最佳模型
     """
     knn = KNeighborsClassifier()
-    param_grid = {'n_neighbors': [3, 5, 7, 13, 17, 19]}
+    # param_grid = {'n_neighbors': [3, 5, 7, 13, 17, 19]}
+    param_grid = {'n_neighbors': [3, 5, 7]}
+    # param_grid = {'n_neighbors': [13]}
+    # param_grid = {'n_neighbors': [i for i in range(3, 1000)]}
     grid_search = GridSearchCV(knn, param_grid, cv=5, scoring='accuracy')
     grid_search.fit(X_train, y_train)
     
@@ -69,7 +72,7 @@ if __name__ == "__main__":
     X, y = preprocess_data(data)
     
     # 划分训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
     
     # 训练模型
     print("Training model...")

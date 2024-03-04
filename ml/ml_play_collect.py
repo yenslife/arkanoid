@@ -44,13 +44,21 @@ class MLPlay:
                 else:
                     self.target_x = Eular
 
-            err = random.randint(-5, 5)
-            if self.target_x > scene_info["platform"][0] + 20 + err:
+            err = random.randint(0, 5)
+            if self.target_x > scene_info['platform'][0] - err and self.target_x < scene_info["platform"][0] + 40 + err:
+                command = "NONE" # 我們只需要關鍵操作來訓練模型
+            elif self.target_x > scene_info["platform"][0] + 20 + err:
                 command = "MOVE_RIGHT"
             elif self.target_x < scene_info["platform"][0] + 20 + err:
                 command = "MOVE_LEFT"
             else:
                 command = "NONE"
+            # if self.target_x > scene_info["platform"][0] + 20 + err:
+            #     command = "MOVE_RIGHT"
+            # elif self.target_x < scene_info["platform"][0] + 20 + err:
+            #     command = "MOVE_LEFT"
+            # else:
+            #     command = "NONE"
 
         if (scene_info['ball'][1] > self.previous_ball_y):
             # 如果球正在下降才要搜集資料
@@ -78,6 +86,7 @@ class MLPlay:
                 data_dir['platform_dir'] = 1
             else:
                 data_dir['platform_dir'] = 0
+                return command # 如果是 None 就不要加到資料集中
         
             self.data.append(data_dir)
         
