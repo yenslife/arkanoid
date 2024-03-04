@@ -4,10 +4,11 @@ run_mlgame() {
     python -m mlgame -1 --nd -f 9000 -i ./ml/ml_play_collect.py . --difficulty NORMAL --level $1
 }
 
-for ((level=1; level<=25; level++))
+for ((level=1; level<=9; level++))
 do
-    for ((i=1; i<=2; i++))
+    for ((i=1; i<=3; i++))
     do
         run_mlgame $level
     done
 done
+
