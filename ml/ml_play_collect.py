@@ -46,7 +46,7 @@ class MLPlay:
 
             err = random.randint(0, 3)
             if self.target_x > scene_info['platform'][0] - err and self.target_x < scene_info["platform"][0] + 40 + err:
-                command = "NONE" # 我們只需要關鍵操作來訓練模型
+                command = "NONE" 
             elif self.target_x > scene_info["platform"][0] + err:
                 command = "MOVE_RIGHT"
             elif self.target_x < scene_info["platform"][0] + err:
@@ -67,8 +67,8 @@ class MLPlay:
                     command = "MOVE_RIGHT"
                 elif scene_info["ball"][0] < platform_x:
                     command = "MOVE_LEFT"
-                else:
-                    command = "NONE"
+                # else:
+                #     command = "NONE"
 
         # if (scene_info['ball'][1] > self.previous_ball_y):
         # 如果球正在下降才要搜集資料
