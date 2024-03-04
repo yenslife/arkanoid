@@ -35,7 +35,7 @@ class MLPlay:
             self.current_ball_x = scene_info["ball"][0]
             self.current_ball_y = scene_info["ball"][1]
             # 正在下降且在判斷區
-            if (scene_info['ball'][1] > self.previous_ball_y) and (0 < scene_info['ball'][1] < 300) and (10 < scene_info['ball'][0] < 190):
+            if (scene_info['ball'][1] > self.previous_ball_y) and (0 < scene_info['ball'][1] < 400) and (10 < scene_info['ball'][0] < 190):
                 time = ((395 - scene_info['ball'][1]) / (scene_info['ball'][1] - self.previous_ball_y))
                 step = time * (scene_info['ball'][0] - self.previous_ball_x)
                 Eular = (step + scene_info['ball'][0] + 780) % 390
@@ -52,35 +52,34 @@ class MLPlay:
             else:
                 command = "NONE"
 
-        # 搜集資料
-        data_dir = {}
-        # 右下0 右上1 左下2 左上3
-        data_dir['direction'] = 0
-        ball_direction_vector = (self.current_ball_x - self.previous_ball_x, self.current_ball_y - self.previous_ball_y)
-        if ball_direction_vector[0] > 0 and ball_direction_vector[1] > 0:
+        if (scene_info['ball'][1] > self.previous_ball_y):
+            # 如果球正在下降才要搜集資料
+            data_dir = {}
+            # 右下0 右上1 左下2 左上3
             data_dir['direction'] = 0
-        elif ball_direction_vector[0] > 0 and ball_direction_vector[1] < 0:
-            data_dir['direction'] = 1
-        elif ball_direction_vector[0] < 0 and ball_direction_vector[1] > 0:
-            data_dir['direction'] = 2
-        elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
-            data_dir['direction'] = 3
-        data_dir['ball'] = (self.current_ball_x, self.current_ball_y)
+            ball_direction_vector = (self.current_ball_x - self.previous_ball_x, self.current_ball_y - self.previous_ball_y)
+            if ball_direction_vector[0] > 0 and ball_direction_vector[1] > 0:
+                data_dir['direction'] = 0
+            elif ball_direction_vector[0] > 0 and ball_direction_vector[1] < 0:
+                data_dir['direction'] = 1
+            elif ball_direction_vector[0] < 0 and ball_direction_vector[1] > 0:
+                data_dir['direction'] = 2
+            elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
+                data_dir['direction'] = 3
+            data_dir['ball'] = (self.current_ball_x, self.current_ball_y)
 
-        # 球的 x 方向以及 y 方向的速度
-        data_dir['ball_speed'] = ball_direction_vector
+            # 球的 x 方向以及 y 方向的速度
+            data_dir['ball_speed'] = ball_direction_vector
 
-        # 平台移動方向 -1 向左 1 向右 0 不動
-        if command == "MOVE_LEFT":
-            data_dir['platform_dir'] = -1
-        elif command == "MOVE_RIGHT":
-            data_dir['platform_dir'] = 1
-        else:
-            data_dir['platform_dir'] = 0
+            # 平台移動方向 -1 向左 1 向右 0 不動
+            if command == "MOVE_LEFT":
+                data_dir['platform_dir'] = -1
+            elif command == "MOVE_RIGHT":
+                data_dir['platform_dir'] = 1
+            else:
+                data_dir['platform_dir'] = 0
         
-
-
-        self.data.append(data_dir)
+            self.data.append(data_dir)
         
 
         return command
