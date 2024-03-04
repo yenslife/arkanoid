@@ -102,6 +102,8 @@ class Arkanoid(PaiaGame):
         self._brick = []
         self._hard_brick = []
         self._create_init_scene()
+        # print out scene info
+        # print(self.get_scene_init_data())
         pass
 
     @property

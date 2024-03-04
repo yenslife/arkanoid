@@ -25,9 +25,8 @@ The template of the main script of the machine learning process
 
 """
 import pickle
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 import joblib
+import numpy as np
 
 class MLPlay:
     def __init__(self,ai_name, *args, **kwargs):
@@ -40,6 +39,9 @@ class MLPlay:
         self.previous_ball_x = 0
         self.previous_ball_y = 0
         self.num_of_bounce = 0
+        #self.loaded_model = joblib.load('best_knn_model.sav')
+        self.loaded_model = pickle.load(open('best_knn_model.sav', 'rb'))#joblib.load('best_knn_model.sav')
+        print(self.loaded_model)
         print(ai_name)
 
     
@@ -65,9 +67,9 @@ class MLPlay:
             self.current_ball_y = scene_info["ball"][1]
             
             # 讀取模型
-            model_name = 'ml/model.pickle'
-            
-            loaded_model = joblib.load('model.sav')
+            #loaded_model = self.loaded_model #joblib.load('best_knn_model.sav')
+            # loaded_model = joblib.load('model.sav')
+            # loaded_model = pickle.load(open('best_knn_model.sav', 'rb'))
             
             # 處理資料
             x = []
@@ -82,10 +84,14 @@ class MLPlay:
                 ball_direction = 2
             elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
                 ball_direction = 3
-            x.append([ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]])
+            # x.append([ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]])
+            x = [ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]]
+            x_reshaped = np.array(x).reshape(1, -1) 
+            #print(x)
+            # print(x_reshaped)
             # 預測
-            prediction = loaded_model.predict(x)
-            print(prediction)
+            prediction = self.loaded_model.predict(x_reshaped)
+            print(f'prediction[0]: {prediction[0]}')
             # 輸出指令
             if prediction[0] == 1:
                 command = "MOVE_RIGHT"

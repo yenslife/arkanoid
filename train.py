@@ -17,8 +17,8 @@ if __name__ == "__main__":
     x = []
     y = []
     for i in data:
-        x.append([i['ball'][0], i['ball'][1], i['ball_speed'][0], i['ball_speed'][1], i['platform_dir']])
-        y.append(i['direction'])
+        x.append([i['ball'][0], i['ball'][1], i['ball_speed'][0], i['ball_speed'][1], i['direction']])
+        y.append(i['platform_dir'])
 
     # 切割資料
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
