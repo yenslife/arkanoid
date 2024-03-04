@@ -3,7 +3,7 @@ The template of the main script of the machine learning process
 """
 import random
 import pickle
-import re
+import os
 
 class MLPlay:
     def __init__(self,ai_name, *args, **kwargs):
@@ -90,6 +90,11 @@ class MLPlay:
         Reset the status
         """
         self.ball_served = False
-        filename = 'ml/model2.pickle'
+        pickle_list = os.listdir('data_pickle')
+        pickle_list = [int(i.replace('.pickle', '').replace('num', '')) for i in pickle_list]
+        pickle_list = sorted(pickle_list, key=lambda x: x, reverse=False)
+        print(pickle_list)
+        number = 0 if len(pickle_list) == 0 else pickle_list[-1] + 1
+        filename = f'data_pickle/num{number}.pickle'
         with open(filename, 'wb') as file:
             pickle.dump(self.data, file)
