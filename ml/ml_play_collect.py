@@ -44,7 +44,7 @@ class MLPlay:
             else:
                 self.target_x = Eular
 
-            err = random.randint(0, 3)
+            err = random.randint(-1, 3)
             if self.target_x > scene_info['platform'][0] - err and self.target_x < scene_info["platform"][0] + 40 + err:
                 command = "NONE" 
             elif self.target_x > scene_info["platform"][0] + err:
@@ -60,15 +60,16 @@ class MLPlay:
             # else:
             #     command = "NONE"
 
-            # 第二種：球往上的時候一直跟著球
-            if (scene_info['ball'][1] < self.previous_ball_y):
+            # 第二種：球往上或者球在上面的時候一直跟著球
+            ball_y = scene_info['ball'][1]
+            if (ball_y < self.previous_ball_y) or (ball_y < 170):
                 platform_x = (scene_info["platform"][0] + 40) / 2
                 if scene_info["ball"][0] > platform_x:
                     command = "MOVE_RIGHT"
                 elif scene_info["ball"][0] < platform_x:
                     command = "MOVE_LEFT"
-                # else:
-                #     command = "NONE"
+                else:
+                    command = "NONE"
 
         # if (scene_info['ball'][1] > self.previous_ball_y):
         # 如果球正在下降才要搜集資料

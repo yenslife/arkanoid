@@ -73,7 +73,6 @@ class MLPlay:
             
             # 處理資料
             x = []
-            y = []
             ball_direction = 0
             ball_direction_vector = (self.current_ball_x - self.previous_ball_x, self.current_ball_y - self.previous_ball_y)
             if ball_direction_vector[0] > 0 and ball_direction_vector[1] > 0:
