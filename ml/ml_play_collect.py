@@ -14,6 +14,7 @@ class MLPlay:
         self.current_ball_y = 0
         self.previous_ball_x = 0
         self.previous_ball_y = 0
+        self.current_platform_x = 0
         self.target_x = 0
         self.data = []
         print(ai_name)
@@ -34,6 +35,7 @@ class MLPlay:
             self.previous_ball_y = self.current_ball_y
             self.current_ball_x = scene_info["ball"][0]
             self.current_ball_y = scene_info["ball"][1]
+            self.current_platform_x = scene_info["platform"][0]
             # 正在下降且在判斷區
             # if (scene_info['ball'][1] > self.previous_ball_y):
             time = ((395 - scene_info['ball'][1]) / (scene_info['ball'][1] - self.previous_ball_y))
@@ -44,7 +46,8 @@ class MLPlay:
             else:
                 self.target_x = Eular
 
-            err = random.randint(-1, 3)
+            err = random.randint(0, 5)
+            # err = 0
             if self.target_x > scene_info['platform'][0] - err and self.target_x < scene_info["platform"][0] + 40 + err:
                 command = "NONE" 
             elif self.target_x > scene_info["platform"][0] + err:
@@ -89,6 +92,9 @@ class MLPlay:
 
         # 球的 x 方向以及 y 方向的速度
         data_dir['ball_speed'] = ball_direction_vector
+
+        # 平台 x 方向
+        data_dir['platform_x'] = self.current_platform_x
 
         # 平台移動方向 -1 向左 1 向右 0 不動
         if command == "MOVE_LEFT":

@@ -27,7 +27,7 @@ def preprocess_data(data):
     """
     数据预处理：提取特征和标签，并进行标准化处理
     """
-    X = np.array([[d['ball'][0], d['ball'][1], d['ball_speed'][0], d['ball_speed'][1],d['direction']] for d in data])
+    X = np.array([[d['ball'][0], d['ball'][1], d['ball_speed'][0], d['ball_speed'][1], d['direction'], d['platform_x']] for d in data])
     y = np.array([d['platform_dir'] for d in data])
     
     # 数据标准化
@@ -80,7 +80,6 @@ if __name__ == "__main__":
     
     # 划分训练集和测试集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    print(y_train)
     
     # 训练模型
     print("Training model...")

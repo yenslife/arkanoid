@@ -65,6 +65,7 @@ class MLPlay:
             self.previous_ball_y = self.current_ball_y
             self.current_ball_x = scene_info["ball"][0]
             self.current_ball_y = scene_info["ball"][1]
+            self.current_platform_x = scene_info["platform"][0]
             
             # 讀取模型
             #loaded_model = self.loaded_model #joblib.load('best_knn_model.sav')
@@ -85,7 +86,7 @@ class MLPlay:
             elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
                 ball_direction = 3
             # x.append([ball_direction, self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1]])
-            x = [self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1], ball_direction]
+            x = [self.current_ball_x, self.current_ball_y, ball_direction_vector[0], ball_direction_vector[1], ball_direction, self.current_platform_x]
             x_reshaped = np.array(x).reshape(1, -1) 
             #print(x)
             # print(x_reshaped)
