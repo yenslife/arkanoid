@@ -25,16 +25,12 @@ def load_data_from_pickle(folder_path):
 
 def preprocess_data(data):
     """
-    数据预处理：提取特征和标签，并进行标准化处理
+    資料預處理：提取特徵(切記這邊不用標準化，因為這樣模型會抓不到特徵)
     """
     X = np.array([[d['ball'][0], d['ball'][1], d['ball_speed'][0], d['ball_speed'][1], d['direction'], d['platform_x']] for d in data])
     y = np.array([d['platform_dir'] for d in data])
     
-    # 数据标准化
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    
-    return X_scaled, y
+    return X, y
 
 
 def train_model(X_train, y_train):
