@@ -29,7 +29,7 @@ class MLPlay:
                 scene_info["status"] == "GAME_PASS"):
             return "RESET"
         if not scene_info["ball_served"]:
-            command = "SERVE_TO_RIGHT" if random.choice([True, False]) else "SERVE_TO_LEFT"
+            command = "SERVE_TO_LEFT"
         else:
             self.previous_ball_x = self.current_ball_x
             self.previous_ball_y = self.current_ball_y
@@ -37,6 +37,7 @@ class MLPlay:
             self.current_ball_y = scene_info["ball"][1]
             self.current_platform_x = scene_info["platform"][0]
             # 正在下降且在判斷區
+            command = "NONE"
             # if (scene_info['ball'][1] > self.previous_ball_y):
             time = ((395 - scene_info['ball'][1]) / (scene_info['ball'][1] - self.previous_ball_y))
             step = time * (scene_info['ball'][0] - self.previous_ball_x)
@@ -63,16 +64,16 @@ class MLPlay:
             # else:
             #     command = "NONE"
 
-            # 第二種：球往上或者球在上面的時候一直跟著球
-            ball_y = scene_info['ball'][1]
-            if (ball_y < self.previous_ball_y) or (ball_y < 170):
-                platform_x = (scene_info["platform"][0] + 40) / 2
-                if scene_info["ball"][0] > platform_x:
-                    command = "MOVE_RIGHT"
-                elif scene_info["ball"][0] < platform_x:
-                    command = "MOVE_LEFT"
-                else:
-                    command = "NONE"
+            # # 第二種：球往上或者球在上面的時候一直跟著球
+            # ball_y = scene_info['ball'][1]
+            # if (ball_y < self.previous_ball_y) or (ball_y < 170):
+            #     platform_x = (scene_info["platform"][0] + 40) / 2
+            #     if scene_info["ball"][0] > platform_x:
+            #         command = "MOVE_RIGHT"
+            #     elif scene_info["ball"][0] < platform_x:
+            #         command = "MOVE_LEFT"
+            #     else:
+            #         command = "NONE"
 
         # if (scene_info['ball'][1] < self.previous_ball_y):
         # 如果球正在下降才要搜集資料
@@ -103,9 +104,7 @@ class MLPlay:
             data_dir['platform_dir'] = 1
         else:
             data_dir['platform_dir'] = 0
-            # 用隨機的方式決定是否保留 NONE 操作
-            # if random.randrange(100) is not 1:
-            #     return command
+
         
         self.data.append(data_dir)
         

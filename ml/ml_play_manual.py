@@ -23,6 +23,8 @@ class MLPlay:
         """
         Generate the command according to the received `scene_info`.
         """
+        # 搜集資料
+        data_dir = {}
         # Make the caller to invoke `reset()` for the next round.
         self.previous_ball_x = self.current_ball_x
         self.previous_ball_y = self.current_ball_y
@@ -42,12 +44,14 @@ class MLPlay:
             self.ball_served = True
         elif pygame.K_LEFT in keyboard or pygame.K_a in keyboard:
             command = "MOVE_LEFT"
+            data_dir['platform_dir'] = -1
         elif pygame.K_RIGHT in keyboard or pygame.K_d in keyboard:
             command = "MOVE_RIGHT"
+            data_dir['platform_dir'] = 1
         else:
             command = "NONE"
-        # 搜集資料
-        data_dir = {}
+            data_dir['platform_dir'] = 0
+        
         # 右下0 右上1 左下2 左上3
         data_dir['direction'] = 0
         ball_direction_vector = (self.current_ball_x - self.previous_ball_x, self.current_ball_y - self.previous_ball_y)
@@ -60,10 +64,12 @@ class MLPlay:
         elif ball_direction_vector[0] < 0 and ball_direction_vector[1] < 0:
             data_dir['direction'] = 3
         data_dir['ball'] = (self.current_ball_x, self.current_ball_y)
-
+        # 平台 x 方向
+        data_dir['platform_x'] = scene_info["platform"][0] 
         # 球的 x 方向以及 y 方向的速度
         data_dir['ball_speed'] = ball_direction_vector
-
+        
+        
         self.data.append(data_dir)
         return command
 
